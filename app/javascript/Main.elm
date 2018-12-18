@@ -69,6 +69,9 @@ update message model =
         ChangeName name ->
             ( { model | name = name }, Cmd.none )
 
+        ChangeContent name ->
+            ( { model | content = name }, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS

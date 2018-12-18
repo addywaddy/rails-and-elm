@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Html, button, div, h3, h5, hr, input, p, text, textarea)
-import Html.Attributes exposing (placeholder, style)
+import Html.Attributes exposing (placeholder, style, value)
 
 
 -- MODEL
@@ -34,9 +34,9 @@ view model =
             [ text "New Message" ]
         , div []
             [ p []
-                [ input [ placeholder "Your name" ] []
+                [ input [ placeholder "Your name", value model.name ] []
                 ]
-            , textarea [ placeholder "Your message" ] []
+            , textarea [ placeholder "Your message", value model.content ] []
             , p []
                 [ button [] [ text "Post" ]
                 ]

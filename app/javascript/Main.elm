@@ -55,7 +55,7 @@ view model =
 
 
 type Message
-    = ChangeName
+    = ChangeName String
 
 
 
@@ -64,7 +64,9 @@ type Message
 
 update : Message -> Model -> ( Model, Cmd Message )
 update message model =
-    ( model, Cmd.none )
+    case message of
+        ChangeName name ->
+            ( { model | name = name }, Cmd.none )
 
 
 

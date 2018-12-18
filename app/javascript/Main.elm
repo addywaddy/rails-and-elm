@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h3, h5, hr, input, p, text, textarea)
+import Html exposing (Html, b, button, div, h3, h5, hr, input, p, text, textarea)
 import Html.Attributes exposing (placeholder, style, value)
 import Html.Events exposing (onInput)
 
@@ -56,6 +56,7 @@ view model =
         , div []
             [ h3 []
                 [ text "Messages" ]
+            , div [] (List.map viewMessage model.messages)
             ]
         ]
 

@@ -25,7 +25,7 @@ messageDecoder =
 getMessages : Cmd Msg
 getMessages =
     Http.get
-        { url = "/messages"
+        { url = "/messages.json"
         , expect = Http.expectJson GotMessages (list messageDecoder)
         }
 

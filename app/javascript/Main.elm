@@ -133,7 +133,11 @@ update message model =
                 Ok messages ->
                     ( { model | messages = messages }, Cmd.none )
 
-                Err messages ->
+                Err error ->
+                    let
+                        _ =
+                            Debug.log "errors" error
+                    in
                     ( { model | hasErrors = Just True }, Cmd.none )
 
 

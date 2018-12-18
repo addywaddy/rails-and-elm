@@ -17,7 +17,7 @@ type alias Model =
 -- INIT
 
 
-init : () -> ( Model, Cmd Message )
+init : () -> ( Model, Cmd Msg )
 init _ =
     ( Model "John" "My fascinating message", Cmd.none )
 
@@ -26,7 +26,7 @@ init _ =
 -- VIEW
 
 
-view : Model -> Html Message
+view : Model -> Html Msg
 view model =
     -- The inline style is being used for example purposes in order to keep this example simple and
     -- avoid loading additional resources. Use a proper stylesheet when building your own app.
@@ -54,7 +54,7 @@ view model =
 -- MESSAGE
 
 
-type Message
+type Msg
     = ChangeName String
     | ChangeContent String
 
@@ -63,7 +63,7 @@ type Message
 -- UPDATE
 
 
-update : Message -> Model -> ( Model, Cmd Message )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         ChangeName name ->
@@ -77,7 +77,7 @@ update message model =
 -- SUBSCRIPTIONS
 
 
-subscriptions : Model -> Sub Message
+subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
 
@@ -86,7 +86,7 @@ subscriptions model =
 -- MAIN
 
 
-main : Program () Model Message
+main : Program () Model Msg
 main =
     Browser.element
         { init = init

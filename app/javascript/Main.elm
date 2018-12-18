@@ -3,6 +3,7 @@ module Main exposing (..)
 import Browser
 import Html exposing (Html, button, div, h3, h5, hr, input, p, text, textarea)
 import Html.Attributes exposing (placeholder, style, value)
+import Html.Events exposing (onInput)
 
 
 -- MODEL
@@ -34,7 +35,7 @@ view model =
             [ text "New Message" ]
         , div []
             [ p []
-                [ input [ placeholder "Your name", value model.name ] []
+                [ input [ placeholder "Your name", value model.name, onInput ChangeName ] []
                 ]
             , textarea [ placeholder "Your message", value model.content ] []
             , p []
@@ -54,7 +55,7 @@ view model =
 
 
 type Message
-    = None
+    = ChangeName
 
 
 

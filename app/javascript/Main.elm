@@ -23,23 +23,31 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "John" "My fascinating message" [], Cmd.none )
+    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ], Cmd.none )
 
 
 
 -- VIEW
 
 
+viewMessage : Message -> Html Msg
+viewMessage message =
+    div [ style "padding" "5px" ]
+        [ b [] [ text message.name ]
+        , p [] [ text message.content ]
+        , hr [] []
+        ]
+
+
 view : Model -> Html Msg
 view model =
     -- The inline style is being used for example purposes in order to keep this example simple and
     -- avoid loading additional resources. Use a proper stylesheet when building your own app.
-    div [ style "display" "flex" ]
-        [ div [ style "background" "#eee" ]
-            [ h3 []
-                [ text "New Message" ]
-            , div []
-                [ p []
+    div []
+        [ div [ style "background" "#eee", style "display" "flex" ]
+            [ div []
+                [ h3 [] [ text "New Message" ]
+                , p []
                     [ input [ placeholder "Your name", value model.name, onInput ChangeName ] []
                     ]
                 , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []

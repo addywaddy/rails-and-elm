@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h3, hr, input, p, text, textarea)
+import Html exposing (Html, button, div, h3, h5, hr, input, p, text, textarea)
 import Html.Attributes exposing (placeholder, style)
 
 
@@ -9,7 +9,7 @@ import Html.Attributes exposing (placeholder, style)
 
 
 type alias Model =
-    {}
+    { name : String, content : String }
 
 
 
@@ -18,7 +18,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Message )
 init _ =
-    ( Model, Cmd.none )
+    ( Model "John" "My fascinating message", Cmd.none )
 
 
 
@@ -43,7 +43,8 @@ view model =
             ]
         , div []
             [ h3 [] [ text "Preview" ]
-            , p [] [ text "A preview of your message will appear here" ]
+            , h5 [] [ text model.name ]
+            , p [] [ text model.content ]
             ]
         ]
 

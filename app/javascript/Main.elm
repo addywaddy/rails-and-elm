@@ -39,7 +39,7 @@ type alias Message =
 
 
 type alias Model =
-    { name : String, content : String, messages : List Message }
+    { name : String, content : String, messages : List Message, hasErrors : Maybe Bool }
 
 
 
@@ -48,7 +48,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ], getMessages )
+    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ] Nothing, getMessages )
 
 
 
@@ -62,6 +62,16 @@ viewMessage message =
         , p [] [ text message.content ]
         , hr [] []
         ]
+
+
+viewErrorMessage : Model -> Html Msg
+viewErrorMessage model =
+    case model.hasErrors of
+        Just bool ->
+            p [] [ text "CANT LOAD MESSAGES!!!" ]
+
+        Nothing ->
+            text ""
 
 
 view : Model -> Html Msg
@@ -89,6 +99,7 @@ view model =
         , div []
             [ h3 []
                 [ text "Messages" ]
+            , viewErrorMessage model
             , div [] (List.map viewMessage model.messages)
             ]
         ]
@@ -121,6 +132,9 @@ update message model =
             case result of
                 Ok messages ->
                     ( { model | messages = messages }, Cmd.none )
+
+                Err messages ->
+                    ( { model | hasErrors = Just True }, Cmd.none )
 
 
 

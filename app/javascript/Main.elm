@@ -1,8 +1,8 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h1, hr, input, p, text, textarea)
-import Html.Attributes exposing (style)
+import Html exposing (Html, button, div, h3, hr, input, p, text, textarea)
+import Html.Attributes exposing (placeholder, style)
 
 
 -- MODEL
@@ -30,14 +30,20 @@ view model =
     -- The inline style is being used for example purposes in order to keep this example simple and
     -- avoid loading additional resources. Use a proper stylesheet when building your own app.
     div []
-        [ h1 []
+        [ h3 []
             [ text "New Message" ]
-        , p []
-            [ input [] []
+        , div []
+            [ p []
+                [ input [ placeholder "Your name" ] []
+                ]
+            , textarea [ placeholder "Your message" ] []
+            , p []
+                [ button [] [ text "Post" ]
+                ]
             ]
-        , textarea [] []
-        , p []
-            [ button [] [ text "Post" ]
+        , div []
+            [ h3 [] [ text "Preview" ]
+            , p [] [ text "A preview of your message will appear here" ]
             ]
         ]
 

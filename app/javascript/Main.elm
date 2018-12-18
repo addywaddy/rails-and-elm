@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, h1, text)
+import Html exposing (Html, button, div, h1, hr, input, p, text, textarea)
 import Html.Attributes exposing (style)
 
 
@@ -29,8 +29,17 @@ view : Model -> Html Message
 view model =
     -- The inline style is being used for example purposes in order to keep this example simple and
     -- avoid loading additional resources. Use a proper stylesheet when building your own app.
-    h1 [ style "display" "flex", style "justify-content" "center" ]
-        [ text "Hello Elm!" ]
+    div []
+        [ h1 []
+            [ text "New Message" ]
+        , p []
+            [ input [] []
+            ]
+        , textarea [] []
+        , p []
+            [ button [] [ text "Post" ]
+            ]
+        ]
 
 
 

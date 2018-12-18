@@ -37,7 +37,7 @@ view model =
             [ p []
                 [ input [ placeholder "Your name", value model.name, onInput ChangeName ] []
                 ]
-            , textarea [ placeholder "Your message", value model.content ] []
+            , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []
             , p []
                 [ button [] [ text "Post" ]
                 ]
@@ -56,6 +56,7 @@ view model =
 
 type Message
     = ChangeName String
+    | ChangeContent String
 
 
 

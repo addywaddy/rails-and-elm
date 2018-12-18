@@ -9,8 +9,12 @@ import Html.Events exposing (onInput)
 -- MODEL
 
 
-type alias Model =
+type alias Message =
     { name : String, content : String }
+
+
+type alias Model =
+    { name : String, content : String, messages : List Message }
 
 
 
@@ -19,7 +23,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "John" "My fascinating message", Cmd.none )
+    ( Model "John" "My fascinating message" [], Cmd.none )
 
 
 
@@ -30,22 +34,28 @@ view : Model -> Html Msg
 view model =
     -- The inline style is being used for example purposes in order to keep this example simple and
     -- avoid loading additional resources. Use a proper stylesheet when building your own app.
-    div []
-        [ h3 []
-            [ text "New Message" ]
-        , div []
-            [ p []
-                [ input [ placeholder "Your name", value model.name, onInput ChangeName ] []
+    div [ style "display" "flex" ]
+        [ div [ style "background" "#eee" ]
+            [ h3 []
+                [ text "New Message" ]
+            , div []
+                [ p []
+                    [ input [ placeholder "Your name", value model.name, onInput ChangeName ] []
+                    ]
+                , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []
+                , p []
+                    [ button [] [ text "Post" ]
+                    ]
                 ]
-            , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []
-            , p []
-                [ button [] [ text "Post" ]
+            , div []
+                [ h3 [] [ text "Preview" ]
+                , h5 [] [ text model.name ]
+                , p [] [ text model.content ]
                 ]
             ]
         , div []
-            [ h3 [] [ text "Preview" ]
-            , h5 [] [ text model.name ]
-            , p [] [ text model.content ]
+            [ h3 []
+                [ text "Messages" ]
             ]
         ]
 

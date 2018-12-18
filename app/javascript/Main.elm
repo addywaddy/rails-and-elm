@@ -4,6 +4,31 @@ import Browser
 import Html exposing (Html, b, button, div, h3, h5, hr, input, p, text, textarea)
 import Html.Attributes exposing (placeholder, style, value)
 import Html.Events exposing (onInput)
+import Http
+import Json.Decode exposing (Decoder, field, list, map2, string)
+
+
+-- DECODERS
+
+
+messageDecoder : Decoder Message
+messageDecoder =
+    map2 Message
+        (field "name" string)
+        (field "content" string)
+
+
+
+-- HTTP
+
+
+getMessages : Cmd Msg
+getMessages =
+    Http.get
+        { url = "/messages"
+        , expect = Http.expectJson GotMessages (list messageDecoder)
+        }
+
 
 
 -- MODEL
@@ -23,7 +48,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ], Cmd.none )
+    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ], getMessages )
 
 
 
@@ -76,6 +101,7 @@ view model =
 type Msg
     = ChangeName String
     | ChangeContent String
+    | GotMessages (Result Http.Error (List Message))
 
 
 

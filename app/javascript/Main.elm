@@ -117,6 +117,11 @@ update message model =
         ChangeContent name ->
             ( { model | content = name }, Cmd.none )
 
+        GotMessages result ->
+            case result of
+                Ok messages ->
+                    ( { model | messages = messages }, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS

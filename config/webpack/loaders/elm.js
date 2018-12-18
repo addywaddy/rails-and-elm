@@ -7,7 +7,6 @@ const elm = `${elmSource}/node_modules/.bin/elm`
 const elmDefaultOptions = { cwd: elmSource, pathToElm: elm }
 const developmentOptions = Object.assign({}, elmDefaultOptions, {
   verbose: true,
-  warn: true,
   debug: true
 })
 

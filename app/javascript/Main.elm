@@ -1,5 +1,14 @@
 module Main exposing (..)
 
+{-
+   Here we're importing all the dependencies needed by our application.
+   Elm.core also has a number of default imports which are available implicitly to our application.
+   See here: https://package.elm-lang.org/packages/elm/core/latest/ for details.
+
+   All exposed functions and types are available to us without needing to be qualified via the
+   namespace, so that we can write e.g. `field` instead of `Json.Decode.field`
+-}
+
 import Browser
 import Html exposing (Html, b, button, div, h3, h5, hr, input, p, text, textarea)
 import Html.Attributes exposing (placeholder, style, value)
@@ -8,10 +17,30 @@ import Http
 import Json.Decode exposing (Decoder, field, list, map2, string)
 
 
--- DECODERS
+{-
+   DECODERS
+   Package: elm/json
+
+   Whenever you want to use json data inside Elm, you need to first convert it to Elm data using a
+   decoder.
+   See here: https://guide.elm-lang.org/effects/json.html
+-}
 
 
 messageDecoder : Decoder Message
+
+
+
+{-
+   Decode our JSON representation of our Message instance from Rails:
+
+   {name: "Peter", content: "My message to you", created_at: ...}
+
+   into Elm data using our Message constructor. Note that we only need to specify the fields we are
+   interested in.
+-}
+
+
 messageDecoder =
     map2 Message
         (field "name" string)
@@ -19,10 +48,25 @@ messageDecoder =
 
 
 
--- HTTP
+{-
+   HTTP
+   Package: elm/http
+   Enables us to make HTTP requests, decode the response, and pass the Result to a Msg contructor. This
+   is then handled in our update function, enabling us to handle both successful and unsuccessful
+   requests.
+-}
 
 
 getMessages : Cmd Msg
+
+
+
+{-
+   Here we're requesting the supplied URL and then using our messageDecoder to decode the list of
+   messages in the response.
+-}
+
+
 getMessages =
     Http.get
         { url = "/messages.json"
@@ -31,7 +75,12 @@ getMessages =
 
 
 
--- MODEL
+-- MODELS
+{-
+   Elm is strongly typed and so we need to specify the types for the state held by our application.
+   Type aliases are typed records which are similar to a schema: they define attribute
+   names and the corresponding type.
+-}
 
 
 type alias Message =
@@ -43,7 +92,13 @@ type alias Model =
 
 
 
--- INIT
+{-
+   INITIAL FUCTION
+
+   The following function defines the initial state of our application. The `()` below represents an
+   empty value type. The returned tuple (..., ...) contains our initial state plus a command to get the
+   messages.
+-}
 
 
 init : () -> ( Model, Cmd Msg )
@@ -52,10 +107,21 @@ init _ =
 
 
 
--- VIEW
+{-
+   VIEWS
+
+   This is where we render our application, as well as returning messages for updating our
+   application's state, such as handling click events.
+-}
 
 
 viewMessage : Message -> Html Msg
+
+
+
+{- Takes a message and return the corresponding HTML markup -}
+
+
 viewMessage message =
     div [ style "padding" "5px" ]
         [ b [] [ text message.name ]
@@ -65,6 +131,12 @@ viewMessage message =
 
 
 viewErrorMessage : Model -> Html Msg
+
+
+
+{- Takes a model and displays an error message conditionally -}
+
+
 viewErrorMessage model =
     case model.hasErrors of
         Just bool ->
@@ -75,9 +147,13 @@ viewErrorMessage model =
 
 
 view : Model -> Html Msg
+
+
+
+{- Our main view function, which renders everything -}
+
+
 view model =
-    -- The inline style is being used for example purposes in order to keep this example simple and
-    -- avoid loading additional resources. Use a proper stylesheet when building your own app.
     div []
         [ div [ style "background" "#eee", style "display" "flex" ]
             [ div []
@@ -106,7 +182,12 @@ view model =
 
 
 
--- MESSAGE
+{-
+   MESSAGES
+   Here we define a union type (called `Msg` here to avoid a conflict with our `Message` type alias
+   above). A union type defines a set of types which belong to it, meaning that we can react to each
+   of these in our update function.
+-}
 
 
 type Msg
@@ -116,7 +197,11 @@ type Msg
 
 
 
--- UPDATE
+{-
+   UPDATE FUNCTION
+   This is where we handle state change within our application, and where we can also trigger
+   additional state changes if our returning tuple issues a command.
+-}
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -134,15 +219,18 @@ update message model =
                     ( { model | messages = messages }, Cmd.none )
 
                 Err error ->
-                    let
-                        _ =
-                            Debug.log "errors" error
-                    in
                     ( { model | hasErrors = Just True }, Cmd.none )
 
 
 
--- SUBSCRIPTIONS
+{-
+   SUBSCRIPTIONS FUNCTION
+
+   Here we can set up one or more subscriptions for e.g. Websocket connections, ports (enabling
+   communication with javascript outside of our Elm application). If you have a usecase for using
+   setInterval in Javascript, this would also be a subscription (See `Time.every` in the elm/time
+   package for details).
+-}
 
 
 subscriptions : Model -> Sub Msg
@@ -151,7 +239,12 @@ subscriptions model =
 
 
 
--- MAIN
+{-
+   MAIN FUNCTION
+
+   Our entry point. Our application is taking over control of a single node in the DOM and so we setup
+   our application here using `Browser.element`.
+-}
 
 
 main : Program () Model Msg

@@ -74,6 +74,23 @@ getMessages =
         }
 
 
+postMessage : Model -> Cmd Msg
+
+
+
+{-
+   We
+-}
+
+
+postMessage model =
+    Http.post
+        { url = "/messages.json"
+        , body = Http.emptyBody
+        , expect = Http.expectJson MessageCreated messageDecoder
+        }
+
+
 
 -- MODELS
 {-
@@ -92,7 +109,7 @@ type alias Model =
     , content : String
     , messages : List Message
     , hasErrors : Bool
-    , isSubmitted :
+    , isSubmitting :
         Bool
     }
 
@@ -167,7 +184,7 @@ view model =
                     ]
                 , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []
                 , p []
-                    [ button [ onClick Submit, disabled model.isSubmitted ] [ text "Post" ]
+                    [ button [ onClick Submit, disabled model.isSubmitting ] [ text "Post" ]
                     ]
                 ]
             , div []
@@ -198,6 +215,7 @@ type Msg
     = ChangeName String
     | ChangeContent String
     | GotMessages (Result Http.Error (List Message))
+    | MessageCreated (Result Http.Error Message)
     | Submit
 
 
@@ -210,8 +228,8 @@ type Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update message model =
-    case message of
+update msg model =
+    case msg of
         ChangeName name ->
             ( { model | name = name }, Cmd.none )
 
@@ -219,7 +237,7 @@ update message model =
             ( { model | content = name }, Cmd.none )
 
         Submit ->
-            ( { model | isSubmitted = True }, Cmd.none )
+            ( { model | isSubmitting = True }, postMessage model )
 
         GotMessages result ->
             case result of
@@ -228,6 +246,18 @@ update message model =
 
                 Err error ->
                     ( { model | hasErrors = True }, Cmd.none )
+
+        MessageCreated result ->
+            let
+                submittedModel =
+                    { model | isSubmitting = False }
+            in
+            case result of
+                Ok message ->
+                    ( { submittedModel | messages = message :: submittedModel.messages }, Cmd.none )
+
+                Err error ->
+                    ( { submittedModel | hasErrors = True }, Cmd.none )
 
 
 

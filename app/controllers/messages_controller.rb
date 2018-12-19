@@ -1,4 +1,13 @@
 class MessagesController < ApplicationController
+  def create
+    respond_to do |format|
+      format.json do
+        message = Message.create!(message_params)
+        render json: message.to_json
+      end
+    end
+  end
+
   def index
     respond_to do |format|
       format.html
@@ -6,5 +15,11 @@ class MessagesController < ApplicationController
         render json: Message.all.to_json
       end
     end
+  end
+
+  private
+
+  def message_params
+    params.require(:message).permit(:name, :content)
   end
 end

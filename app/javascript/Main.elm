@@ -15,6 +15,25 @@ import Html.Attributes exposing (disabled, placeholder, style, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode exposing (Decoder, field, list, map2, string)
+import Json.Encode as Encode
+
+
+{-
+   ENCODERS
+   Package: elm/json
+
+   Passing data out of elm requires encoding it first.
+
+-}
+
+
+encodedMessage : Model -> Encode.Value
+encodedMessage model =
+    Encode.object
+        [ ( "name", Encode.string model.name )
+        , ( "content", Encode.string model.content )
+        ]
+
 
 
 {-
@@ -86,7 +105,7 @@ postMessage : Model -> Cmd Msg
 postMessage model =
     Http.post
         { url = "/messages.json"
-        , body = Http.emptyBody
+        , body = Http.jsonBody (encodedMessage model)
         , expect = Http.expectJson MessageCreated messageDecoder
         }
 

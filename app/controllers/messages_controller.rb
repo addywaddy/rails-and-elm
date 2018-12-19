@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: Message.all.to_json
+        render json: Message.order('created_at DESC').to_json
       end
     end
   end

@@ -11,8 +11,8 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Html, b, button, div, h3, h5, hr, input, p, text, textarea)
-import Html.Attributes exposing (placeholder, style, value)
-import Html.Events exposing (onInput)
+import Html.Attributes exposing (disabled, placeholder, style, value)
+import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode exposing (Decoder, field, list, map2, string)
 
@@ -88,7 +88,13 @@ type alias Message =
 
 
 type alias Model =
-    { name : String, content : String, messages : List Message, hasErrors : Maybe Bool }
+    { name : String
+    , content : String
+    , messages : List Message
+    , hasErrors : Bool
+    , isSubmitted :
+        Bool
+    }
 
 
 
@@ -103,7 +109,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ] Nothing, getMessages )
+    ( Model "John" "My fascinating message" [ Message "Frank" "Hi there!" ] False False, getMessages )
 
 
 
@@ -138,12 +144,10 @@ viewErrorMessage : Model -> Html Msg
 
 
 viewErrorMessage model =
-    case model.hasErrors of
-        Just bool ->
-            p [] [ text "CANT LOAD MESSAGES!!!" ]
-
-        Nothing ->
-            text ""
+    if model.hasErrors then
+        p [] [ text "CANT LOAD MESSAGES!!!" ]
+    else
+        text ""
 
 
 view : Model -> Html Msg
@@ -163,7 +167,7 @@ view model =
                     ]
                 , textarea [ placeholder "Your message", value model.content, onInput ChangeContent ] []
                 , p []
-                    [ button [] [ text "Post" ]
+                    [ button [ onClick Submit, disabled model.isSubmitted ] [ text "Post" ]
                     ]
                 ]
             , div []
@@ -194,6 +198,7 @@ type Msg
     = ChangeName String
     | ChangeContent String
     | GotMessages (Result Http.Error (List Message))
+    | Submit
 
 
 
@@ -213,13 +218,16 @@ update message model =
         ChangeContent name ->
             ( { model | content = name }, Cmd.none )
 
+        Submit ->
+            ( { model | isSubmitted = True }, Cmd.none )
+
         GotMessages result ->
             case result of
                 Ok messages ->
                     ( { model | messages = messages }, Cmd.none )
 
                 Err error ->
-                    ( { model | hasErrors = Just True }, Cmd.none )
+                    ( { model | hasErrors = True }, Cmd.none )
 
 
 

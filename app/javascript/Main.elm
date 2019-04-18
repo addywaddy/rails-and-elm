@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (Message, Model, Msg(..), encodedMessage, getMessages, init, main, messageDecoder, postMessage, subscriptions, update, view, viewErrorMessage, viewMessage)
 
 {-
    Here we're importing all the dependencies needed by our application.
@@ -16,6 +16,7 @@ import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode exposing (Decoder, field, list, map2, string)
 import Json.Encode as Encode
+
 
 
 {-
@@ -182,6 +183,7 @@ viewErrorMessage : Model -> Html Msg
 viewErrorMessage model =
     if model.hasErrors then
         p [] [ text "CANT LOAD MESSAGES!!!" ]
+
     else
         text ""
 

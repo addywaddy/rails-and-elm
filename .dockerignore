@@ -1,0 +1,10 @@
+.git
+.gitignore
+.elm
+/elm-stuff
+.env
+log
+tmp
+public/system
+coverage
+.babelrc

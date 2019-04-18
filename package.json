@@ -1,10 +1,11 @@
 {
-  "name": "rails-and-elm",
+  "name": "translation_app",
   "private": true,
   "dependencies": {
     "@rails/webpacker": "3.5",
     "csrf-xhr": "^1.0.0",
     "elm": "^0.19.0-bugfix2",
+    "elm-css-modules-loader": "^3.0.4",
     "elm-hot-webpack-loader": "^1.0.2",
     "elm-webpack-loader": "^5.0.0"
   },

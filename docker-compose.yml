@@ -1,0 +1,29 @@
+---
+version: '3'
+services:
+  webpacker:
+    build: .
+    env_file:
+      - '.env.dev'
+    command: sh webpacker-start.sh
+    volumes:
+      - .:/app
+    ports:
+      - '3035:3035'
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+  app:
+    build: .
+    command: sh start.sh
+    env_file:
+      - '.env.dev'
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=webpacker
+  postgres_11_2:
+    image: postgres:11.2
